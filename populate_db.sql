@@ -183,4 +183,8 @@ INSERT INTO teaching_loads (professor_id, group_id, credits) VALUES
 	(3, 2, 3.0),
 	(5, 3, 1.5),
 	(4, 3, 1.5);
+	
+INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
+VALUES (1, 1, 8.5, 'Primera', 1);
+
 
