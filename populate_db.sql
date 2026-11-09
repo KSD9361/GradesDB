@@ -188,3 +188,4 @@ INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
 VALUES (1, 1, 8.5, 'Primera', 1);
 
 
+

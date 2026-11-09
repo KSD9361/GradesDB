@@ -1,3 +1,4 @@
+USE grades_db;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS teaching_loads;
 DROP TABLE IF EXISTS subject_enrollments;
@@ -9,6 +10,7 @@ DROP TABLE IF EXISTS degrees;
 DROP TABLE IF EXISTS students;
 DROP TABLE IF EXISTS professors;
 DROP TABLE IF EXISTS people;
+DROP TABLE IF EXISTS group_enrollments, subject_enrollments;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE people (
@@ -66,7 +68,7 @@ CREATE TABLE groups (
  PRIMARY KEY (group_id),
  FOREIGN KEY (subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE
 );
-CREATE TABLE group_enrollments (
+CREATE TABLE students_group (
  student_id INT,
  group_id INT,
  PRIMARY KEY (student_id, group_id),
@@ -86,7 +88,7 @@ CREATE TABLE grades (
  FOREIGN KEY (group_id) REFERENCES groups(group_id)
 );
 
-CREATE TABLE subject_enrollments (
+CREATE TABLE students_subject (
     student_id INT,
     subject_id INT,
     PRIMARY KEY (student_id, subject_id),
