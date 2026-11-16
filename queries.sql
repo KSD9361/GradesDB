@@ -53,26 +53,38 @@ JOIN subjects sb ON sb.subject_id = ss.subject_id;
 SELECT * 
 FROM l_students;
 
-
+-- Average grade of students from group 7
 SELECT AVG(g.grade_value) AS average_grade
 FROM grades g
-WHERE g.group_id = 1;
+WHERE g.group_id = 7;
+-- Average age of professors named David
+SELECT AVG(p.age) AS average_age
+FROM people p
+WHERE p.first_name = 'David';
 
 
+-- Total credits of group 1
 SELECT SUM(s.credits) AS total_credits
-FROM subjects s 
-WHERE s.degree_id = 3;
+FROM teaching_loads s 
+WHERE s.group_id = 1;
 
 
-SELECT COUNT(*) AS total_students
-FROM students;
-SELECT activity, COUNT(*) AS total_groups
-FROM groups
-GROUP BY activity;
+-- How many professors are there? 
+
+SELECT COUNT(*) AS total_profs
+FROM professors;
+
+
+SELECT subject_type, COUNT(*) AS total_type
+FROM subjects
+GROUP BY subject_type;
+
 SELECT MAX(g.grade_value) AS max_grade
 FROM grades g;
+
 SELECT MIN(g.grade_value) AS min_grade
 FROM grades g;
+
 SELECT g.grade_id, g.grade_value, g.exam_call
 FROM grades g
 WHERE g.grade_value < 5 OR g.grade_value > 9;
