@@ -6,55 +6,64 @@
 -- 
 
 USE grades_db;
-SELECT columnas FROM tabla WHERE condiciones;
+
+
+
+
+
+SELECT s.degree_id FROM degrees s WHERE s.degree_name ='Tecnologías Informáticas';
+
 SELECT * 
-FROM subjects;
+FROM students_subject;
+
+
+SELECT *
+FROM grades s
+WHERE s.student_id = 12;
+
+SELECT s.student_id, s.grade_value
+FROM grades s;
+
+SELECT s.student_id, s.grade_value, s.exam_call
+FROM grades s
+WHERE s.grade_value > 5;
+
+-- students del grupo 2 matriculados en FP
+SELECT ss.subject_id, ss.subject_id, s.acronym
+FROM subjects s
+JOIN students_subject ss ON ss.subject_id = s.subject_id
+WHERE s.acronym = 'FP';
+
+
+
+
+CREATE OR REPLACE VIEW l_students AS
+SELECT 
+    ss.student_id,
+    ss.subject_id,
+    sb.degree_id,
+    sb.subject_name,
+    sb.acronym,
+    sb.credits,
+    sb.course,
+    sb.subject_type
+FROM students_subject ss
+JOIN subjects sb ON sb.subject_id = ss.subject_id;
+
 SELECT * 
-FROM subjects s
-WHERE s.acronym = 'IISSI-1';
-SELECT s.subject_name, s.acronym 
-FROM subjects s;
-SELECT s.subject_name, s.acronym, s.subject_type
-FROM subjects s
-WHERE s.subject_type = 'Formación Básica';
-SELECT p.first_name, p.last_name, st.access_method
-FROM students st
-JOIN people p ON st.student_id = p.person_id
-WHERE st.access_method = 'Selectividad';
-SELECT p.first_name, p.last_name, pr.category
-FROM professors pr
-JOIN people p ON pr.professor_id = p.person_id
-WHERE pr.category = 'Catedrático';
-CREATE OR REPLACE VIEW v_professors AS
-SELECT 
-    pr.professor_id,
-    pr.category,
-    p.person_id,
-    p.dni,
-    p.first_name,
-    p.last_name,
-    p.age,
-    p.email
-FROM professors pr
-JOIN people p ON pr.professor_id = p.person_id;
-CREATE OR REPLACE VIEW v_students AS
-SELECT 
-    st.student_id,
-    st.access_method,
-    p.person_id,
-    p.dni,
-    p.first_name,
-    p.last_name,
-    p.age,
-    p.email
-FROM students st
-JOIN people p ON st.student_id = p.person_id;
+FROM l_students;
+
+
 SELECT AVG(g.grade_value) AS average_grade
 FROM grades g
 WHERE g.group_id = 1;
+
+
 SELECT SUM(s.credits) AS total_credits
 FROM subjects s 
 WHERE s.degree_id = 3;
+
+
 SELECT COUNT(*) AS total_students
 FROM students;
 SELECT activity, COUNT(*) AS total_groups
