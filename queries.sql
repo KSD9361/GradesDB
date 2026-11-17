@@ -263,6 +263,44 @@ GROUP BY p.person_id
 HAVING pp.category = 'Titular';
 
 
+-- Consulta 55: 
+SELECT 
+     ge.group_id,
+    COUNT(DISTINCT ge.student_id) AS total_students
+FROM subjects s
+JOIN groups gr ON s.subject_id = gr.subject_id
+JOIN students_group ge ON gr.group_id = ge.group_id
+WHERE ge.group_id = 2
+;
 
+-- Consulta 58: Maximum professor age 
+SELECT 
+    pv.first_name,
+    pv.last_name,
+    MAX(p.age) AS max_age
+FROM view_professors pv
+JOIN people p ON pv.person_id = p.person_id
+GROUP BY p.person_id, pv.first_name, pv.last_name
+ORDER BY MAX(p.age) DESC;
 
+-- Consulta 59: Profesores que imparten en más de 1 grupo
+SELECT 
+    pr.first_name,
+    pr.last_name,
+    COUNT(DISTINCT tl.group_id) AS total_groups
+FROM view_professors pr
+JOIN teaching_loads tl ON pr.professor_id = tl.professor_id
+GROUP BY pr.professor_id, pr.first_name, pr.last_name
+HAVING COUNT(DISTINCT tl.group_id) > 1;
 
+-- Consulta 60: Degrees where more than 6 subjects are obligatory
+SELECT DISTINCT s.subject_name, d.degree_name, s.degree_id
+FROM subjects s
+JOIN degrees d ON s.degree_id = d.degree_id
+WHERE d.degree_id IN (
+    SELECT degree_id
+    FROM subjects
+    WHERE s.subject_type = 'Obligatoria'
+    GROUP BY degree_id
+    HAVING COUNT(*) > 6
+);
