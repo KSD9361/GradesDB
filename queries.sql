@@ -167,11 +167,85 @@ SELECT v.first_name, v.last_name, AVG(v.credits) AS average_credits
 FROM view_professors v
 GROUP BY v.person_id, v.first_name, v.last_name;
 
--- Las 10 personas mas viejas
+
 SELECT p.first_name, p.last_name, p.age
 FROM people p 
 ORDER BY p.age DESC
 LIMIT 3 OFFSET 3;
+-- Las 10 personas mas viejas
+SELECT p.first_name, p.last_name, p.age
+FROM people p 
+ORDER BY p.age DESC
+LIMIT 10;
+
+-- Consulta 33: Professores ordenados por creditos
+SELECT DISTINCT p.first_name, p.last_name, tl.credits
+FROM teaching_loads tl
+JOIN view_professors p ON p.person_id = tl.professor_id
+WHERE tl.credits > 1.5
+ORDER BY p.last_name ASC, p.first_name ASC
+LIMIT 3 OFFSET 1;
+
+
+-- Consulta 42: LEFT JOIN
+
+CREATE OR REPLACE VIEW view_professors AS
+SELECT 
+    p.person_id,
+    p.first_name,
+    p.last_name,
+    p.dni,
+    p.email,
+    p.age,
+    pp.professor_id,
+    pp.category,
+    tl.group_id,
+    tl.credits
+FROM people p
+JOIN professors pp ON p.person_id = pp.professor_id
+LEFT JOIN teaching_loads tl ON pp.professor_id = tl.professor_id;
+
+
+SELECT *
+FROM view_professors;
+
+
+CREATE OR REPLACE VIEW view_professors AS
+SELECT 
+    p.person_id,
+    p.first_name,
+    p.last_name,
+    p.dni,
+    p.email,
+    p.age,
+    pp.professor_id,
+    pp.category,
+    tl.group_id,
+    tl.credits
+FROM people p
+JOIN professors pp ON p.person_id = pp.professor_id
+JOIN teaching_loads tl ON pp.professor_id = tl.professor_id
+GROUP BY tl.credits;
+
+
+SELECT *
+FROM view_professors;
+
+
+-- Consulta 44: Número de estudiantes por método de acceso
+SELECT 
+    st.access_method,
+    COUNT(*) AS total_students
+FROM students st
+GROUP BY st.access_method;
+
+SELECT p.last_name, AVG(p.age) AS average_age, COUNT(*) AS total_people
+FROM people p
+GROUP BY p.last_name;
+
+
+
+
 
 
 
