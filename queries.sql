@@ -189,7 +189,7 @@ LIMIT 3 OFFSET 1;
 
 -- Consulta 42: LEFT JOIN
 
-CREATE OR REPLACE VIEW view_professors AS
+
 SELECT 
     p.person_id,
     p.first_name,
@@ -201,7 +201,7 @@ SELECT
     pp.category,
     tl.group_id,
     tl.credits
-FROM people p
+FROM view_professors p
 JOIN professors pp ON p.person_id = pp.professor_id
 LEFT JOIN teaching_loads tl ON pp.professor_id = tl.professor_id;
 
@@ -210,7 +210,7 @@ SELECT *
 FROM view_professors;
 
 
-CREATE OR REPLACE VIEW view_professors AS
+
 SELECT 
     p.person_id,
     p.first_name,
@@ -222,7 +222,7 @@ SELECT
     pp.category,
     tl.group_id,
     tl.credits
-FROM people p
+FROM view_professors p
 JOIN professors pp ON p.person_id = pp.professor_id
 JOIN teaching_loads tl ON pp.professor_id = tl.professor_id
 GROUP BY tl.credits;
@@ -244,7 +244,23 @@ FROM people p
 GROUP BY p.last_name;
 
 
-
+-- Consulta 51:
+SELECT 
+    p.person_id,
+    p.first_name,
+    p.last_name,
+    p.dni,
+    p.email,
+    p.age,
+    pp.professor_id,
+    pp.category,
+    tl.group_id,
+    tl.credits
+FROM view_professors p
+JOIN professors pp ON p.person_id = pp.professor_id
+JOIN teaching_loads tl ON pp.professor_id = tl.professor_id
+GROUP BY p.person_id
+HAVING pp.category = 'Titular';
 
 
 
