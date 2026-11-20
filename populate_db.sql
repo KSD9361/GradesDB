@@ -1,3 +1,4 @@
+-- Description
 USE grades_db;
 
 DELIMITER //

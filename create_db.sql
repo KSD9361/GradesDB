@@ -1,3 +1,4 @@
+-- Description
 USE grades_db;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS teaching_loads;
