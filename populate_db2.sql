@@ -1,4 +1,4 @@
---
+-- d
 -- Autor: David Ruiz
 -- Fecha: Octubre de 2026
 -- Descripción: Datos adicionales para grades_db para cubrir consultas de L3
