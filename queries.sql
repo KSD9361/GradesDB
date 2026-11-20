@@ -1,4 +1,4 @@
--- 
+-- Description
 -- Autor: INAS
 -- Fecha: Octube 2026
 -- Descripción: Consultas SQL de ejemplo para grades_db
