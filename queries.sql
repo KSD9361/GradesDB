@@ -14,7 +14,7 @@ USE grades_db;
 SELECT s.degree_id FROM degrees s WHERE s.degree_name ='Tecnologías Informáticas';
 
 SELECT * 
-FROM students_subject;
+FROM students_subjects;
 
 
 SELECT *
@@ -31,7 +31,7 @@ WHERE s.grade_value > 5;
 -- students del grupo 2 matriculados en FP
 SELECT ss.subject_id, ss.subject_id, s.acronym
 FROM subjects s
-JOIN students_subject ss ON ss.subject_id = s.subject_id
+JOIN students_subjects ss ON ss.subject_id = s.subject_id
 WHERE s.acronym = 'FP';
 
 
@@ -47,7 +47,7 @@ SELECT
     sb.credits,
     sb.course,
     sb.subject_type
-FROM students_subject ss
+FROM students_subjects ss
 JOIN subjects sb ON sb.subject_id = ss.subject_id;
 
 SELECT * 
@@ -116,7 +116,7 @@ WHERE p.person_id BETWEEN 1 AND 10;
 
 -- Consulta 21: Materias con 6 creditos
 SELECT DISTINCT ge.subject_id
-FROM students_subject ge
+FROM students_subjects ge
 WHERE ge.subject_id IN (
     SELECT g.subject_id 
     FROM subjects g 
@@ -269,7 +269,7 @@ SELECT
     COUNT(DISTINCT ge.student_id) AS total_students
 FROM subjects s
 JOIN groups gr ON s.subject_id = gr.subject_id
-JOIN students_group ge ON gr.group_id = ge.group_id
+JOIN students_groups ge ON gr.group_id = ge.group_id
 WHERE ge.group_id = 2
 ;
 
@@ -293,7 +293,7 @@ JOIN teaching_loads tl ON pr.professor_id = tl.professor_id
 GROUP BY pr.professor_id, pr.first_name, pr.last_name
 HAVING COUNT(DISTINCT tl.group_id) > 1;
 
--- Consulta 60: Degrees where more than 6 subjects are obligatory
+-- Consulta 60: Degrees where more than 6 subjects are obli
 SELECT DISTINCT s.subject_name, d.degree_name, s.degree_id
 FROM subjects s
 JOIN degrees d ON s.degree_id = d.degree_id

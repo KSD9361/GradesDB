@@ -1,8 +1,12 @@
+USE grades_db;
+DELIMITER //
+CREATE OR REPLACE PROCEDURE p_populate()
+BEGIN
 SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM teaching_loads;
-DELETE FROM subject_enrollments;
+DELETE FROM students_subjects;
 DELETE FROM grades;
-DELETE FROM group_enrollments;
+DELETE FROM students_groups;
 DELETE FROM groups;
 DELETE FROM subjects;
 DELETE FROM degrees;
@@ -11,7 +15,7 @@ DELETE FROM professors;
 DELETE FROM people;
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO people (person_id, dni, first_name, last_name, age, email)
+INSERT INTO people (person_id, dni, first_name, last_name, age, email) 
 VALUES
  (1, '00000001A', 'David', 'Ruiz', 50, 'druiz@us.es'),
  (2, '00000002B', 'Inma', 'Hernández', 40, 'inmahernandez@us.es'),
@@ -87,38 +91,30 @@ INSERT INTO degrees (degree_id, degree_name, duration_years) VALUES
 ) VALUES
  -- Primer curso (Tecnologías Informáticas)
  (1, 3, 'Fundamentos de Programación', 'FP', 12, 1, 'Formación Básica'),
- (2, 3, 'Cálculo Infinitesimal y Numérico', 'CIN', 6, 1, 'Formación
-Básica'),
- (3, 3, 'Circuitos Electrónicos Digitales', 'CED', 6, 1, 'Formación
-Básica'),
- (4, 3, 'Fundamentos Físicos de la Informática', 'FFI', 6, 1, 'Formación
-Básica'),
- (5, 3, 'Introducción a la Matemática Discreta', 'IMD', 6, 1, 'Formación
-Básica'),
+ (2, 3, 'Cálculo Infinitesimal y Numérico', 'CIN', 6, 1, 'Formación Básica'),
+ (3, 3, 'Circuitos Electrónicos Digitales', 'CED', 6, 1, 'Formación Básica'),
+ (4, 3, 'Fundamentos Físicos de la Informática', 'FFI', 6, 1, 'Formación Básica'),
+ (5, 3, 'Introducción a la Matemática Discreta', 'IMD', 6, 1, 'Formación Básica'),
  (6, 3, 'Administración de Empresas', 'ADE', 6, 1, 'Formación Básica'),
  (7, 3, 'Álgebra Lineal y Numérica', 'ALN', 6, 1, 'Formación Básica'),
  (8, 3, 'Estadística', 'EST', 6, 1, 'Formación Básica'),
  (9, 3, 'Estructura de Computadores', 'EC', 6, 1, 'Formación Básica'),
  -- Segundo curso (Tecnologías Informáticas)
- (10, 3, 'Análisis y Diseño de Datos y Algoritmos', 'ADDA', 12, 2,
-'Obligatoria'),
- (11, 3, 'Introducción a la Ingeniería del Software y los Sistemas de
-Información I', 'IISSI-1', 6, 2, 'Obligatoria'),
+ (10, 3, 'Análisis y Diseño de Datos y Algoritmos', 'ADDA', 12, 2, 'Obligatoria'),
+ (11, 3, 'Introducción a la Ingeniería del Software y los Sistemas de Información I', 'IISSI-1', 6, 2, 'Obligatoria'),
  (12, 3, 'Matemática Discreta', 'MD', 6, 2, 'Obligatoria'),
  (13, 3, 'Redes de Computadores', 'RC', 6, 2, 'Obligatoria'),
  (14, 3, 'Arquitectura de Computadores', 'AC', 6, 2, 'Obligatoria'),
- (15, 3, 'Introducción a la Ingeniería del Software y los Sistemas de
-Información II', 'IISSI-2', 6, 2, 'Obligatoria'),
+ (15, 3, 'Introducción a la Ingeniería del Software y los Sistemas de Información II', 'IISSI-2', 6, 2, 'Obligatoria'),
  (16, 3, 'Sistemas Operativos', 'SO', 6, 2, 'Obligatoria'),
  (17, 3, 'Inteligencia Artificial', 'IA', 6, 2, 'Obligatoria');
 
- INSERT INTO groups (group_id, subject_id, group_name, activity,
-academic_year) VALUES
+ INSERT INTO groups (group_id, subject_id, group_name, activity, academic_year) VALUES
  (1, 11, 'T1', 'Teoría', 2024),
  (2, 11, 'L1', 'Laboratorio', 2024),
  (3, 11, 'L2', 'Laboratorio', 2024);
  
- INSERT INTO group_enrollments (student_id, group_id) VALUES
+ INSERT INTO students_groups (student_id, group_id) VALUES
  -- Teoría
  (6, 1), (7, 1), (8, 1), (9, 1), (10, 1),
  (11, 1), (12, 1), (13, 1), (14, 1), (15, 1),
@@ -171,7 +167,7 @@ academic_year) VALUES
     (34, 24, 1, 6.0, 'Tercera', 0),
     (35, 25, 1, 5.7, 'Tercera', 0);
     
-INSERT INTO subject_enrollments (student_id, subject_id) VALUES
+INSERT INTO students_subjects (student_id, subject_id) VALUES
         (6, 11), (7, 11), (8, 11), (9, 11), (10, 11),
         (11, 11), (12, 11), (13, 11), (14, 11), (15, 11),
         (16, 11), (17, 11), (18, 11), (19, 11), (20, 11),
@@ -184,8 +180,12 @@ INSERT INTO teaching_loads (professor_id, group_id, credits) VALUES
 	(5, 3, 1.5),
 	(4, 3, 1.5);
 	
-INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
-VALUES (1, 1, 8.5, 'Primera', 1);
+END //
+DELIMITER ;
+
+CALL p_populate();
+
+SELECT COUNT(*) FROM students_subjects;
 
 
 
