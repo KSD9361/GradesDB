@@ -22,6 +22,9 @@ END//
 
 
 
+
+
+
 -- RN02: un alumno solo puede tener notas en los grupos a los que pertenece
 CREATE OR REPLACE TRIGGER t_biu_grades_rn02
 BEFORE INSERT OR UPDATE ON grades
@@ -195,7 +198,55 @@ BEGIN
     END IF;
 END//
 
+-- Trigger: Validar que un grado no pueda tener más
+-- de 240 créditos en total sumando todas sus asignaturas.
 
+CREATE OR REPLACE TRIGGER t_biu_degrees
+BEFORE INSERT OR UPDATE ON subjects
+FOR EACH ROW 
+BEGIN 
+	DECLARE v_count INT;
+	SELECT COALESCE(SUM(credits), 0) INTO v_count
+	FROM subjects 
+	WHERE degree_id = NEW.degree_id
+		AND subject_id <> NEW.subject_id;
+	
+	IF v_count + NEW.credits > 240 THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'One degree can only have upto 240 credits';
+	END IF;
+END // 
+		
+-- Trigger: Validar que un estudiante no pueda 
+-- estar matriculado en más de 60 créditos por año académico.
 
 
 DELIMITER ;
+CREATE OR REPLACE TRIGGER t_biu_creditsperacedemicyear
+BEFORE INSERT OR UPDATE ON students_groups
+FOR EACH ROW 
+BEGIN 
+	DECLARE v_subject_id INT;
+	DECLARE v_academic_year YEAR;
+	DECLARE v_ttcryy INT;
+	
+	SELECT subject_id, academic_year INTO v_subject_id, v_aademic_year
+	FROM groups 
+	WHERE group_id = NEW.group_id;
+	
+	SELECT COALESCE(SUM(s.credits), 0) INTO v_total
+	FROM subjects s
+	WHERE s.subject_id = v.subject_id;
+		OR s.subject_id IN (SELECT g.subject_id
+                           FROM students_groups sg
+                           JOIN groups g ON g.group_id = sg.group_id
+                           WHERE sg.student_id = NEW.student_id
+                             AND g.academic_year = v_year);
+
+    -- 3. Reject if the total goes over the limit
+   IF v_total > 60 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Un estudiante no puede estar matriculado en más de 60 créditos por año académico';
+   END IF;
+END //
+	
